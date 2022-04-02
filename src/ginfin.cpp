@@ -1,13 +1,13 @@
-#include <prehdr.h>
-#include <entry.h>
+#include <iostream>
+#include <string>
+
+struct entry {
+	std::string time;
+	float amount;
+};
+typedef struct entry Entry;
 
 int main(int argc, char** argv) {
-	float input;
-	std::cin >> input;
 
-	Entry entry = Entry();
-	entry.set_amount(input);
-	float output = entry.get_amount();
-
-	std::cout << "Output: " << output << std::endl;
+	return 0;
 }
