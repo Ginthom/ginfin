@@ -1,4 +1,4 @@
-#ifndef INCLUDE_COMLETE
+#ifndef INCLUDE_COMPLETE
 
 #include <ctime>
 #include <iostream>
