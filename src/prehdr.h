@@ -4,5 +4,5 @@
 #include <iostream>
 #include <string>
 
-#define INCLUDE
+#define INCLUDE_COMPLETE
 #endif
