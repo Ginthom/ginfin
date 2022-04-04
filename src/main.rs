@@ -35,6 +35,9 @@ pub fn display_menu() {
 fn main() {
 
     //print menu or something
+    display_menu();
+    handle_input();
+
     //Add 'entries'
     //fill up entries with values
     //write entries to file
@@ -45,8 +48,5 @@ fn main() {
     //  month
     //  year
     //display graph
-
-    display_menu();
-    handle_input();
 
 }
