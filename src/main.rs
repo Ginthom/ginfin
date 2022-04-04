@@ -2,26 +2,27 @@ use std::io;
 use std::io::Write;
 
 pub fn prompt_input() -> i32  {
-    let input = String::new();
+    let mut input = String::new();
 
     print!("Input: ");
     io::stdout()
         .flush()
         .unwrap();
     io::stdin()
-        .read_line(input)
+        .read_line(&mut input)
         .unwrap();
 
     match input.parse::<i32>() {
         Ok(result) => return result,
-        Err(e) => eprintln!("Failed to parse input!\nError:\n{}", e)
+        Err(e) => eprintln!("Failed to parse input!\nError: {}", e)
     }
 
     return -1;
 }
 
 pub fn handle_input() {
-    let mut input: i32 = prompt_input();
+    let input: i32 = prompt_input();
+    println!("You used option {}", input)
 
 }
 
