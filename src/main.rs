@@ -12,7 +12,7 @@ pub fn prompt_input() -> i32  {
         .read_line(&mut input)
         .unwrap();
 
-    match input.parse::<i32>() {
+    match input.trim().parse::<i32>() {
         Ok(result) => return result,
         Err(e) => eprintln!("Failed to parse input!\nError: {}", e)
     }
