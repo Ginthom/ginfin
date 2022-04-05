@@ -1,29 +1,35 @@
-use std::io;
-use std::io::Write;
+mod input_reader;
 
-pub fn prompt_input() -> i32  {
-    let mut input = String::new();
-
-    print!("Input: ");
-    io::stdout()
-        .flush()
-        .unwrap();
-    io::stdin()
-        .read_line(&mut input)
-        .unwrap();
-
-    match input.trim().parse::<i32>() {
-        Ok(result) => return result,
-        Err(e) => eprintln!("Failed to parse input!\nError: {}", e)
-    }
-
-    return -1;
+struct Entry {
+    amount: f32,
+    time: String,
 }
 
-pub fn handle_input() {
-    let input: i32 = prompt_input();
-    println!("You used option {}", input)
+pub fn create_entry() {
+    let amount_new = input_reader::input_f32("Enter amount: ");
+    let time_new = input_reader::input_string("Enter time: ");
 
+    let entry = Entry {
+        amount: amount_new,
+        time: time_new
+    };
+
+    //Do something with entry i guess
+}
+
+pub fn view_entries() {}
+
+pub fn handle_input() {
+    let input: i32 = input_reader::input_i32("Input: ");
+    println!("You used option {}", input);
+
+    match input {
+    1 => create_entry(),
+    2 => view_entries(),
+    3 => std::process::exit(0),
+    -1 => (),
+    _ => println!("Invalid input")
+    };
 }
 
 pub fn display_menu() {
