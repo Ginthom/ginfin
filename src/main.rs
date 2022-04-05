@@ -1,5 +1,6 @@
 mod input_reader;
 
+#[derive(Clone)]
 struct Entry {
     amount: f32,
     time: String,
@@ -21,7 +22,15 @@ fn create_entry(mut history: History) {
     history.entries.push(entry);
 }
 
-fn view_entries(history: History) {}
+fn view_entries(history: History) {
+    let tmp_history: Vec<Entry> = history.entries.clone();
+
+    println!("Your history:");
+
+    for entry in tmp_history {
+        println!("->{}: {}€", entry.time, entry.amount);
+    }
+}
 
 fn handle_input(history: History) {
     let input: i32 = input_reader::input_i32("Input: ");
@@ -50,11 +59,10 @@ fn main() {
     };
 
     //Load history from file
-
-    //print menu or something
+    
     display_menu();
     handle_input(history);
-
+    handle_input(history);
     //Add 'entries'
     //fill up entries with values
     //write entries to file
