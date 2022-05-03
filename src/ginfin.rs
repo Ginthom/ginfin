@@ -2,8 +2,8 @@ pub mod engine {
     use terminal_size::{Width, Height, terminal_size};
 
     pub struct Dimension {
-        pub width:  u16,
-        pub height: u16
+        pub width:  usize,
+        pub height: usize
     }
 
     impl Dimension {
@@ -16,12 +16,12 @@ pub mod engine {
     }
 
     pub struct Row {
-        width:   u16,
+        width:   usize,
         char_at: Vec<char>
     }
 
     impl Row {
-        fn new(length: u16) -> Row {
+        fn new(length: usize) -> Row {
             let mut row: Row = Row {
                 width: length, 
                 char_at: Vec::<char>::new()
@@ -53,6 +53,15 @@ pub mod engine {
 
             return grid;
         }
+
+        pub fn set_pixel(&mut self, x: usize, y: usize, content: char) -> Result<(usize, usize), String> {
+            self.row_at[y].char_at[x] = content;
+            match x <= self.bounds.width
+               && y <= self.bounds.height {
+                true  => Ok((x, y)),
+                false => Err("Pixel out of bounds!".to_string())
+            }
+        }
     }
 
     fn get_dimensions() -> Result<Dimension, String> {
@@ -60,8 +69,8 @@ pub mod engine {
         let mut dim   = Dimension{width: 0, height: 0};
 
         if let Some((Width(x), Height(y))) = term_size {
-            dim.width  = x;
-            dim.height = y;
+            dim.width  = x as usize;
+            dim.height = y as usize;
         }
 
         match dim.width  > 0
