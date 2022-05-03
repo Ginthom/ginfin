@@ -56,19 +56,32 @@ pub mod engine {
         }
 
         pub fn set_pixel(&mut self, x: usize, y: usize, content: char) {
+            self.check_pos(x, y); 
+            self.rows[y].pixel[x] = content;
+        }
+
+        pub fn set_text(&mut self, x: usize, y: usize, content: String) {
+            for i in 0..content.len() {
+                self.set_pixel(x+i, y, content.chars()
+                                              .nth(i)
+                                              .unwrap());
+            } 
+        }
+
+        fn check_pos(&self, x: usize, y: usize) {
             if x > self.bounds.width
             || y > self.bounds.height {
-                panic!("Pixel out of bounds\nSet: {}/{} Max: {}/{}", 
-                       x, y, 
+                panic!("Pixel out of bounds\nSet: {}/{} Max: {}/{}\n",
+                       x, y,
                        self.bounds.width, self.bounds.height)
             }
-
-            self.rows[y].pixel[x] = content;
         }
     }
 
     pub fn draw(grid: Grid) {
-        Command::new("clear").status().unwrap();
+        Command::new("clear")
+                 .status()
+                 .unwrap();
         for row in grid.rows {
             for pixel in row.pixel {
                 print!("{}", pixel);
