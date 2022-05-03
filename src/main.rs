@@ -71,10 +71,7 @@ pub fn get_dimensions() -> Result<Dimension, String> {
 }
 
 fn main() {
-    let dim: Dimension = match get_dimensions() {
-        Ok(result) => result,
-        Err(msg)   => panic!("{}", msg)
-    };
+    let grid = Grid::new(); 
 
-    println!("Terminal Size: {}x/{}y", dim.width, dim.height);
+    println!("Terminal Size: {}x/{}y", grid.bounds.width, grid.bounds.height);
 }
