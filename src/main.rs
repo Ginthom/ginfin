@@ -14,7 +14,7 @@ pub fn get_dimensions() -> Result<Dimension, String> {
         dim.height = y;
     }
 
-    match dim.width  > 0 
+    match dim.width  > 0
        && dim.height > 0 {
         true  => Ok(dim),
         false => Err("Failed to get terminal size!".to_string())
