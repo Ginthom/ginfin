@@ -7,7 +7,7 @@ pub mod engine {
     }
 
     impl Dimension {
-        pub fn new() -> Dimension {
+        fn new() -> Dimension {
             return match get_dimensions() {
                 Ok(dim) => dim,
                 Err(msg) => panic!("{}", msg)
@@ -21,7 +21,7 @@ pub mod engine {
     }
 
     impl Row {
-        pub fn new(length: u16) -> Row {
+        fn new(length: u16) -> Row {
             let mut row: Row = Row {
                 width: length, 
                 char_at: Vec::<char>::new()
@@ -37,7 +37,7 @@ pub mod engine {
 
     pub struct Grid {
         pub bounds: Dimension,
-        row_at: Vec<Row>
+        pub row_at: Vec<Row>
     }
 
     impl Grid {
@@ -55,7 +55,7 @@ pub mod engine {
         }
     }
 
-    pub fn get_dimensions() -> Result<Dimension, String> {
+    fn get_dimensions() -> Result<Dimension, String> {
         let term_size = terminal_size();
         let mut dim   = Dimension{width: 0, height: 0};
 
