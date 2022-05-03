@@ -1,5 +1,6 @@
 pub mod engine { 
     use terminal_size::{Width, Height, terminal_size};
+    use std::process::Command;
 
     pub struct Dimension {
         pub width:  usize,
@@ -17,18 +18,18 @@ pub mod engine {
 
     pub struct Row {
         width:   usize,
-        char_at: Vec<char>
+        pixel: Vec<char>
     }
 
     impl Row {
         fn new(length: usize) -> Row {
             let mut row: Row = Row {
                 width: length, 
-                char_at: Vec::<char>::new()
+                pixel: Vec::<char>::new()
             };
 
             for _ in 1..row.width {
-                row.char_at.push(' ');
+                row.pixel.push(' ');
             }
 
             return row;
@@ -37,30 +38,42 @@ pub mod engine {
 
     pub struct Grid {
         pub bounds: Dimension,
-        pub row_at: Vec<Row>
+        pub rows: Vec<Row>
     }
 
     impl Grid {
         pub fn new() -> Grid {
             let mut grid: Grid = Grid {
                 bounds: Dimension::new(), 
-                row_at: Vec::<Row>::new()
+                rows: Vec::<Row>::new()
             };
 
             for _ in 1..grid.bounds.height {
-                grid.row_at.push(Row::new(grid.bounds.width)); 
+                grid.rows.push(Row::new(grid.bounds.width)); 
             }
 
             return grid;
         }
 
-        pub fn set_pixel(&mut self, x: usize, y: usize, content: char) -> Result<(usize, usize), String> {
-            self.row_at[y].char_at[x] = content;
-            match x <= self.bounds.width
-               && y <= self.bounds.height {
-                true  => Ok((x, y)),
-                false => Err("Pixel out of bounds!".to_string())
+        pub fn set_pixel(&mut self, x: usize, y: usize, content: char) {
+            if x > self.bounds.width
+            || y > self.bounds.height {
+                panic!("Pixel out of bounds\nSet: {}/{} Max: {}/{}", 
+                       x, y, 
+                       self.bounds.width, self.bounds.height)
             }
+
+            self.rows[y].pixel[x] = content;
+        }
+    }
+
+    pub fn draw(grid: Grid) {
+        Command::new("clear").status().unwrap();
+        for row in grid.rows {
+            for pixel in row.pixel {
+                print!("{}", pixel);
+            }
+            print!("\n");
         }
     }
 

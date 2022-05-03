@@ -1,13 +1,9 @@
 mod ginfin;
-use crate::ginfin::engine::Grid;
+use crate::ginfin::engine::{Grid, draw};
 
 fn main() {
     let mut grid = Grid::new();
-    match grid.set_pixel(10, 10, 'A') {
-        Ok((x, y)) => println!("Set pixel at {}x | {}y", x, y),
-        Err(msg)   => println!("{}", msg)
-    };
-
-    println!("Terminal Size: {}x | {}y.", grid.bounds.width, grid.bounds.height);
-    
+    grid.set_pixel(10, 10, 'A');
+    grid.set_pixel(100, 27, 'X');
+    draw(grid);
 }
