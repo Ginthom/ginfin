@@ -5,6 +5,55 @@ pub struct Dimension {
     height: u16
 }
 
+impl Dimension {
+    pub fn new() -> Dimension {
+        return match get_dimensions() {
+            Ok(dim) => dim,
+            Err(msg) => panic!("{}", msg)
+        };
+    }
+}
+
+pub struct Row {
+    width:   u16,
+    char_at: Vec<char>
+}
+
+impl Row {
+    pub fn new(length: u16) -> Row {
+        let mut row: Row = Row {
+            width: length, 
+            char_at: Vec::<char>::new()
+        };
+
+        for _ in 1..row.width {
+            row.char_at.push(' ');
+        }
+
+        return row;
+    }
+}
+
+pub struct Grid {
+    bounds: Dimension,
+    row_at: Vec<Row>
+}
+
+impl Grid {
+    pub fn new() -> Grid {
+        let mut grid: Grid = Grid {
+            bounds: Dimension::new(), 
+            row_at: Vec::<Row>::new()
+        };
+
+        for _ in 1..grid.bounds.height {
+            grid.row_at.push(Row::new(grid.bounds.width)); 
+        }
+
+        return grid;
+    }
+}
+
 pub fn get_dimensions() -> Result<Dimension, String> {
     let term_size = terminal_size();
     let mut dim   = Dimension{width: 0, height: 0};
@@ -22,11 +71,10 @@ pub fn get_dimensions() -> Result<Dimension, String> {
 }
 
 fn main() {
-    let dim = match get_dimensions() {
+    let dim: Dimension = match get_dimensions() {
         Ok(result) => result,
-        Err(msg) => panic!("{}", msg)
+        Err(msg)   => panic!("{}", msg)
     };
 
     println!("Terminal Size: {}x/{}y", dim.width, dim.height);
-
 }
