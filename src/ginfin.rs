@@ -4,9 +4,17 @@ pub mod engine {
 
     struct Lines{}
     impl Lines {
-        const D_HOR: char = '\u{2550}';
-        const D_VER: char = '\u{2551}';
-        const D_CRS: char = '\u{256c}';
+        const D_HOR: char = '\u{2550}'; // ═
+        const D_VER: char = '\u{2551}'; //  ║
+        const D_CRS: char = '\u{256c}'; // ╬
+        const D_UDL: char = '\u{2560}'; //  ╠
+        const D_UDR: char = '\u{2563}'; // ╣
+        const D_DLR: char = '\u{2566}'; //  ╦
+        const D_ULR: char = '\u{2569}'; // ╩
+        const D_CDR: char = '\u{2554}'; //  ╔
+        const D_CDL: char = '\u{2557}'; // ╗
+        const D_CUR: char = '\u{255a}'; //  ╚
+        const D_CUL: char = '\u{255d}'; // ╝
     }
 
     pub struct Dimension {
@@ -76,6 +84,7 @@ pub mod engine {
         }
 
         pub fn set_hline(&mut self, x: usize, y: usize, length: usize) {
+            // TODO Add corners for line crossing
             for i in 0..length {
                 match self.rows[y].pixel[x+i] {
                     Lines::D_VER => self.set_pixel(x+i, y, Lines::D_CRS),
@@ -85,12 +94,24 @@ pub mod engine {
         }
 
         pub fn set_vline(&mut self, x: usize, y: usize, length: usize) {
+            // TODO Add corners for line crossing
             for i in 0..length {
                 match self.rows[y+i].pixel[x] {
                     Lines::D_HOR => self.set_pixel(x, y+i, Lines::D_CRS),
                     _            => self.set_pixel(x, y+i, Lines::D_VER)
                 }
             }
+        }
+
+        pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize) {
+            self.set_pixel(x, y, Lines::D_CDR);
+            self.set_pixel(x+width, y, Lines::D_CDL);
+            self.set_pixel(x, y+height, Lines::D_CUR);
+            self.set_pixel(x+width, y+height, Lines::D_CUL);
+            self.set_hline(x+1, y, width-1);
+            self.set_hline(x+1, y+height, width-1);
+            self.set_vline(x, y+1, height-1);
+            self.set_vline(x+width, y+1, height-1);
         }
 
         fn check_pos(&self, x: usize, y: usize) {
