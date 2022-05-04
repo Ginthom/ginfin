@@ -71,8 +71,10 @@ pub mod engine {
         }
 
         pub fn set_pixel(&mut self, x: usize, y: usize, content: char) {
-            self.check_pos(x, y);
-            self.rows[y].pixel[x] = content;
+            match self.check_pos(x, y) {
+                Ok(_) => self.rows[y].pixel[x] = content,
+                Err(_) => return
+            };
         }
 
         pub fn set_text(&mut self, x: usize, y: usize, content: String) {
@@ -86,7 +88,7 @@ pub mod engine {
         pub fn set_hline(&mut self, x: usize, y: usize, length: usize) {
             // TODO Add corners for line crossing
             for i in 0..length {
-                match self.rows[y].pixel[x+i] {
+                match self.get_pixel(x+i, y) {
                     Lines::D_VER => self.set_pixel(x+i, y, Lines::D_CRS),
                     _            => self.set_pixel(x+i, y, Lines::D_HOR)
                 }
@@ -96,7 +98,7 @@ pub mod engine {
         pub fn set_vline(&mut self, x: usize, y: usize, length: usize) {
             // TODO Add corners for line crossing
             for i in 0..length {
-                match self.rows[y+i].pixel[x] {
+                match self.get_pixel(x, y+i) {
                     Lines::D_HOR => self.set_pixel(x, y+i, Lines::D_CRS),
                     _            => self.set_pixel(x, y+i, Lines::D_VER)
                 }
@@ -114,12 +116,18 @@ pub mod engine {
             self.set_vline(x+width, y+1, height-1);
         }
 
-        fn check_pos(&self, x: usize, y: usize) {
-            if x > self.bounds.width
-            || y > self.bounds.height {
-                panic!("Pixel out of bounds\nSet: {}/{} Max: {}/{}\n",
-                       x, y,
-                       self.bounds.width, self.bounds.height)
+        pub fn get_pixel(&self, x: usize, y: usize) -> char{
+            match self.check_pos(x, y) {
+                Ok(_)    => self.rows[y].pixel[x],
+                Err(msg) => ' '
+            }
+        }
+
+        fn check_pos(&self, x: usize, y: usize) -> Result<bool, String> {
+            match x < self.bounds.width-1
+               && y < self.bounds.height-1 {
+                true => Ok(true),
+                false => Err("Pixel out of bounds".to_string())
             }
         }
     }
