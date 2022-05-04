@@ -1,6 +1,13 @@
-pub mod engine { 
+pub mod engine {
     use terminal_size::{Width, Height, terminal_size};
     use std::process::Command;
+
+    struct Lines{}
+    impl Lines {
+        const D_HOR: char = '\u{2550}';
+        const D_VER: char = '\u{2551}';
+        const D_CRS: char = '\u{256c}';
+    }
 
     pub struct Dimension {
         pub width:  usize,
@@ -24,7 +31,7 @@ pub mod engine {
     impl Row {
         fn new(length: usize) -> Row {
             let mut row: Row = Row {
-                width: length, 
+                width: length,
                 pixel: Vec::<char>::new()
             };
 
@@ -44,19 +51,19 @@ pub mod engine {
     impl Grid {
         pub fn new() -> Grid {
             let mut grid: Grid = Grid {
-                bounds: Dimension::new(), 
+                bounds: Dimension::new(),
                 rows: Vec::<Row>::new()
             };
 
             for _ in 1..grid.bounds.height {
-                grid.rows.push(Row::new(grid.bounds.width)); 
+                grid.rows.push(Row::new(grid.bounds.width));
             }
 
             return grid;
         }
 
         pub fn set_pixel(&mut self, x: usize, y: usize, content: char) {
-            self.check_pos(x, y); 
+            self.check_pos(x, y);
             self.rows[y].pixel[x] = content;
         }
 
@@ -65,7 +72,25 @@ pub mod engine {
                 self.set_pixel(x+i, y, content.chars()
                                               .nth(i)
                                               .unwrap());
-            } 
+            }
+        }
+
+        pub fn set_hline(&mut self, x: usize, y: usize, length: usize) {
+            for i in 0..length {
+                match self.rows[y].pixel[x+i] {
+                    Lines::D_VER => self.set_pixel(x+i, y, Lines::D_CRS),
+                    _            => self.set_pixel(x+i, y, Lines::D_HOR)
+                }
+            }
+        }
+
+        pub fn set_vline(&mut self, x: usize, y: usize, length: usize) {
+            for i in 0..length {
+                match self.rows[y+i].pixel[x] {
+                    Lines::D_HOR => self.set_pixel(x, y+i, Lines::D_CRS),
+                    _            => self.set_pixel(x, y+i, Lines::D_VER)
+                }
+            }
         }
 
         fn check_pos(&self, x: usize, y: usize) {
