@@ -7,8 +7,8 @@ pub mod engine {
         const D_HOR: char = '\u{2550}'; // ═
         const D_VER: char = '\u{2551}'; //  ║
         const D_CRS: char = '\u{256c}'; // ╬
-        const D_UDL: char = '\u{2560}'; //  ╠
-        const D_UDR: char = '\u{2563}'; // ╣
+        const D_UDR: char = '\u{2560}'; //  ╠
+        const D_UDL: char = '\u{2563}'; // ╣
         const D_DLR: char = '\u{2566}'; //  ╦
         const D_ULR: char = '\u{2569}'; // ╩
         const D_CDR: char = '\u{2554}'; //  ╔
@@ -86,26 +86,25 @@ pub mod engine {
         }
 
         pub fn set_hline(&mut self, x: usize, y: usize, length: usize) {
-            // TODO Add corners for line crossing
             for i in 0..length {
                 match self.get_pixel(x+i, y) {
-                    Lines::D_VER => self.set_pixel(x+i, y, Lines::D_CRS),
+                    Lines::D_VER => self.set_pixel(x+i, y, self.get_edge_pixel(x, y)),
                     _            => self.set_pixel(x+i, y, Lines::D_HOR)
                 }
             }
         }
 
         pub fn set_vline(&mut self, x: usize, y: usize, length: usize) {
-            // TODO Add corners for line crossing
             for i in 0..length {
                 match self.get_pixel(x, y+i) {
-                    Lines::D_HOR => self.set_pixel(x, y+i, Lines::D_CRS),
+                    Lines::D_HOR => self.set_pixel(x, y+i, self.get_edge_pixel(x, y)),
                     _            => self.set_pixel(x, y+i, Lines::D_VER)
                 }
             }
         }
 
         pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize) {
+            // TODO implement edge pixel for rectangle corners
             self.set_pixel(x, y, Lines::D_CDR);
             self.set_pixel(x+width, y, Lines::D_CDL);
             self.set_pixel(x, y+height, Lines::D_CUR);
@@ -116,10 +115,34 @@ pub mod engine {
             self.set_vline(x+width, y+1, height-1);
         }
 
-        pub fn get_pixel(&self, x: usize, y: usize) -> char{
+        pub fn get_pixel(&self, x: usize, y: usize) -> char {
             match self.check_pos(x, y) {
-                Ok(_)    => self.rows[y].pixel[x],
-                Err(msg) => ' '
+                Ok(_)  => self.rows[y].pixel[x],
+                Err(_) => ' '
+            }
+        }
+
+        fn get_edge_pixel(&self, x: usize, y: usize) -> char {
+            match (self.get_pixel(x-1, y),
+                   self.get_pixel(x+1, y),
+                   self.get_pixel(x, y-1),
+                   self.get_pixel(x, y+1)) {
+                (Lines::D_HOR, Lines::D_HOR, Lines::D_VER, Lines::D_VER) => Lines::D_CRS,
+                (Lines::D_HOR, Lines::D_HOR, Lines::D_VER, ' ')          => Lines::D_ULR,
+                (Lines::D_HOR, Lines::D_HOR, ' ',          Lines::D_HOR) => Lines::D_DLR,
+                (Lines::D_HOR, Lines::D_HOR, ' ',          ' ')          => Lines::D_HOR, //Horizontal line section
+                (Lines::D_HOR, ' ',          Lines::D_VER, Lines::D_VER) => Lines::D_UDL,
+                (Lines::D_HOR, ' ',          Lines::D_VER, ' ')          => Lines::D_CUL,
+                (Lines::D_HOR, ' ',          ' ',          Lines::D_VER) => Lines::D_CDL,
+                (Lines::D_HOR, ' ',          ' ',          ' ')          => Lines::D_HOR, //Line end
+                (' ',          Lines::D_HOR, Lines::D_VER, Lines::D_VER) => Lines::D_UDR,
+                (' ',          Lines::D_HOR, Lines::D_VER, ' ')          => Lines::D_CUR,
+                (' ',          Lines::D_HOR, ' ',          Lines::D_VER) => Lines::D_CDR,
+                (' ',          Lines::D_HOR, ' ',          ' ')          => Lines::D_HOR, //Line end
+                (' ',          ' ',          Lines::D_VER, Lines::D_VER) => Lines::D_VER, //Vertical line section
+                (' ',          ' ',          Lines::D_VER, ' ')          => Lines::D_VER, //Line end
+                (' ',          ' ',          ' ',          Lines::D_VER) => Lines::D_VER, //Line end
+                                                                       _ => ' '
             }
         }
 
