@@ -133,7 +133,7 @@ pub mod engine {
     pub fn draw(grid: Grid) {
         Command::new("clear")
                  .status()
-                 .unwrap();
+                 .expect("Failed to clear terminal!");
         for row in grid.rows {
             for pixel in row.pixel {
                 print!("{}", pixel);
