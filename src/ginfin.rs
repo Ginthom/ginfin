@@ -32,6 +32,21 @@ pub mod engine {
         const CUL: char = '┘';
     }
 
+    struct FAT_LINES{}
+    impl FAT_LINES{
+        const HOR: char = '━';
+        const VER: char = '┃';
+        const CRS: char = '╋'; 
+        const UDR: char = '┣';
+        const UDL: char = '┫';
+        const DLR: char = '┳';
+        const ULR: char = '┻';
+        const CDR: char = '┏';
+        const CDL: char = '┓';
+        const CUR: char = '┗';
+        const CUL: char = '┛';
+    }
+
     pub struct Dimension {
         pub width:  usize,
         pub height: usize
