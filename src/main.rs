@@ -10,15 +10,15 @@ fn test_display() {
     grid.set_rectangle(11, 2, 10, 10, &Fat{});
     grid.set_rectangle(22, 2, 10, 10, &Double{});
 
-    grid.set_hline(1,  13, 9, &Thin{});
-    grid.set_hline(12, 13, 9, &Fat{});
-    grid.set_hline(23, 13, 9, &Double{});
+    grid.set_hline(1, 13, 33, &Thin{});
+    grid.set_hline(1, 15, 33, &Fat{});
+    grid.set_hline(2, 17, 33, &Double{});
 
     grid.set_vline(1,  13, 9, &Thin{});
     grid.set_vline(12, 13, 9, &Fat{});
     grid.set_vline(23, 13, 9, &Double{});
 
-    grid.set_text(1, 17, "This is merely a test run".to_string());
+    grid.set_text(1, 19, "This is merely a test run".to_string());
 
     draw(grid);
 }
