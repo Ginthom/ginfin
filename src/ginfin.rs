@@ -100,7 +100,7 @@ pub mod engine {
                 if self.get_pixel(x, y+i) == line.HOR() {
                     self.set_pixel(x, y+i, line.CRS());
                 } else {
-                    self.set_pixel(x, y+1, line.VER());
+                    self.set_pixel(x, y+i, line.VER());
                 }
             }
         }
