@@ -15,14 +15,14 @@ pub mod engine {
     impl Dimension {
         fn new() -> Dimension {
             return match get_dimensions() {
-                Ok(dim) => dim,
+                Ok(dim)  => dim,
                 Err(msg) => panic!("{}", msg)
             };
         }
     }
 
     pub struct Row {
-        width:   usize,
+        width: usize,
         pixel: Vec<char>
     }
 
@@ -43,14 +43,14 @@ pub mod engine {
 
     pub struct Grid {
         pub bounds: Dimension,
-        pub rows: Vec<Row>
+        pub rows:   Vec<Row>
     }
 
     impl Grid {
         pub fn new() -> Grid {
             let mut grid: Grid = Grid {
                 bounds: Dimension::new(),
-                rows: Vec::<Row>::new()
+                rows:   Vec::<Row>::new()
             };
 
             for _ in 1..grid.bounds.height {
@@ -63,7 +63,7 @@ pub mod engine {
         fn check_pos(&self, x: usize, y: usize) -> Result<bool, String> {
             match x < self.bounds.width-1
                && y < self.bounds.height-1 {
-                true => Ok(true),
+                true  => Ok(true),
                 false => Err("Pixel out of bounds".to_string())
             }
         }
@@ -72,7 +72,7 @@ pub mod engine {
 
         pub fn set_pixel(&mut self, x: usize, y: usize, content: char) {
             match self.check_pos(x, y) {
-                Ok(_) => self.rows[y].pixel[x] = content,
+                Ok(_)  => self.rows[y].pixel[x] = content,
                 Err(_) => return
             };
         }
@@ -90,7 +90,7 @@ pub mod engine {
                 if self.get_pixel(x+i, y) == line.VER() {
                     self.set_pixel(x+i, y, line.CRS());
                 } else {
-                    self.set_pixel(x+i, y, line.HOR());  
+                    self.set_pixel(x+i, y, line.HOR());
                 }
             }
         }
@@ -106,14 +106,15 @@ pub mod engine {
         }
 
         pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize, line: &dyn Line) {
-            self.set_pixel(x, y, line.CDR());
-            self.set_pixel(x+width, y, line.CDL());
-            self.set_pixel(x, y+height, line.CUR());
+            self.set_pixel(x,       y,        line.CDR());
+            self.set_pixel(x+width, y,        line.CDL());
+            self.set_pixel(x,       y+height, line.CUR());
             self.set_pixel(x+width, y+height, line.CUL());
-            self.set_hline(x+1, y, width-1, line);
-            self.set_hline(x+1, y+height, width-1, line);
-            self.set_vline(x, y+1, height-1, line);
-            self.set_vline(x+width, y+1, height-1, line);
+
+            self.set_hline(x+1,     y,        width-1,  line);
+            self.set_hline(x+1,     y+height, width-1,  line);
+            self.set_vline(x,       y+1,      height-1, line);
+            self.set_vline(x+width, y+1,      height-1, line);
         }
 
         // ELEMENT GETTER
@@ -150,7 +151,6 @@ pub mod engine {
             for pixel in row.pixel {
                 print!("{}", pixel);
             }
-
             print!("\n");
         }
     }
