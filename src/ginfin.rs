@@ -87,29 +87,29 @@ pub mod engine {
 
         pub fn set_hline(&mut self, x: usize, y: usize, length: usize, line: &dyn Line) {
             for i in 0..length {
-                if self.get_pixel(x+i, y) == line.VER() {
-                    self.set_pixel(x+i, y, line.CRS());
+                if self.get_pixel(x+i, y) == line.ver() {
+                    self.set_pixel(x+i, y, line.crs());
                 } else {
-                    self.set_pixel(x+i, y, line.HOR());
+                    self.set_pixel(x+i, y, line.hor());
                 }
             }
         }
 
         pub fn set_vline(&mut self, x: usize, y: usize, length: usize, line: &dyn Line) {
             for i in 0..length {
-                if self.get_pixel(x, y+i) == line.HOR() {
-                    self.set_pixel(x, y+i, line.CRS());
+                if self.get_pixel(x, y+i) == line.hor() {
+                    self.set_pixel(x, y+i, line.crs());
                 } else {
-                    self.set_pixel(x, y+i, line.VER());
+                    self.set_pixel(x, y+i, line.ver());
                 }
             }
         }
 
         pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize, line: &dyn Line) {
-            self.set_pixel(x,       y,        line.CDR());
-            self.set_pixel(x+width, y,        line.CDL());
-            self.set_pixel(x,       y+height, line.CUR());
-            self.set_pixel(x+width, y+height, line.CUL());
+            self.set_pixel(x,       y,        line.cdr());
+            self.set_pixel(x+width, y,        line.cdl());
+            self.set_pixel(x,       y+height, line.cur());
+            self.set_pixel(x+width, y+height, line.cul());
 
             self.set_hline(x+1,     y,        width-1,  line);
             self.set_hline(x+1,     y+height, width-1,  line);

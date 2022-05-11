@@ -1,58 +1,58 @@
 pub trait Line {
-    fn HOR(&self) -> char;
-    fn VER(&self) -> char;
-    fn CRS(&self) -> char;
-    fn UDR(&self) -> char;
-    fn UDL(&self) -> char;
-    fn DLR(&self) -> char;
-    fn ULR(&self) -> char;
-    fn CDR(&self) -> char;
-    fn CDL(&self) -> char;
-    fn CUR(&self) -> char;
-    fn CUL(&self) -> char;
+    fn hor(&self) -> char;
+    fn ver(&self) -> char;
+    fn crs(&self) -> char;
+    fn udr(&self) -> char;
+    fn udl(&self) -> char;
+    fn dlr(&self) -> char;
+    fn ulr(&self) -> char;
+    fn cdr(&self) -> char;
+    fn cdl(&self) -> char;
+    fn cur(&self) -> char;
+    fn cul(&self) -> char;
 }
 
 pub struct Double{}
 impl Line for Double {
-    fn HOR(&self) -> char { '═' }
-    fn VER(&self) -> char { '║' }
-    fn CRS(&self) -> char { '╬' }
-    fn UDR(&self) -> char { '╠' }
-    fn UDL(&self) -> char { '╣' }
-    fn DLR(&self) -> char { '╦' }
-    fn ULR(&self) -> char { '╩' }
-    fn CDR(&self) -> char { '╔' }
-    fn CDL(&self) -> char { '╗' }
-    fn CUR(&self) -> char { '╚' }
-    fn CUL(&self) -> char { '╝' }
+    fn hor(&self) -> char { '═' }
+    fn ver(&self) -> char { '║' }
+    fn crs(&self) -> char { '╬' }
+    fn udr(&self) -> char { '╠' }
+    fn udl(&self) -> char { '╣' }
+    fn dlr(&self) -> char { '╦' }
+    fn ulr(&self) -> char { '╩' }
+    fn cdr(&self) -> char { '╔' }
+    fn cdl(&self) -> char { '╗' }
+    fn cur(&self) -> char { '╚' }
+    fn cul(&self) -> char { '╝' }
 }
 
 pub struct Thin{}
 impl Line for Thin {
-    fn HOR(&self) -> char { '─' }
-    fn VER(&self) -> char { '│' }
-    fn CRS(&self) -> char { '┼' }
-    fn UDR(&self) -> char { '├' }
-    fn UDL(&self) -> char { '┤' }
-    fn DLR(&self) -> char { '┬' }
-    fn ULR(&self) -> char { '┴' }
-    fn CDR(&self) -> char { '┌' }
-    fn CDL(&self) -> char { '┐' }
-    fn CUR(&self) -> char { '└' }
-    fn CUL(&self) -> char { '┘' }
+    fn hor(&self) -> char { '─' }
+    fn ver(&self) -> char { '│' }
+    fn crs(&self) -> char { '┼' }
+    fn udr(&self) -> char { '├' }
+    fn udl(&self) -> char { '┤' }
+    fn dlr(&self) -> char { '┬' }
+    fn ulr(&self) -> char { '┴' }
+    fn cdr(&self) -> char { '┌' }
+    fn cdl(&self) -> char { '┐' }
+    fn cur(&self) -> char { '└' }
+    fn cul(&self) -> char { '┘' }
 }
 
 pub struct Fat{}
 impl Line for Fat {
-    fn HOR(&self) -> char { '━' }
-    fn VER(&self) -> char { '┃' }
-    fn CRS(&self) -> char { '╋' }
-    fn UDR(&self) -> char { '┣' }
-    fn UDL(&self) -> char { '┫' }
-    fn DLR(&self) -> char { '┳' }
-    fn ULR(&self) -> char { '┻' }
-    fn CDR(&self) -> char { '┏' }
-    fn CDL(&self) -> char { '┓' }
-    fn CUR(&self) -> char { '┗' }
-    fn CUL(&self) -> char { '┛' }
+    fn hor(&self) -> char { '━' }
+    fn ver(&self) -> char { '┃' }
+    fn crs(&self) -> char { '╋' }
+    fn udr(&self) -> char { '┣' }
+    fn udl(&self) -> char { '┫' }
+    fn dlr(&self) -> char { '┳' }
+    fn ulr(&self) -> char { '┻' }
+    fn cdr(&self) -> char { '┏' }
+    fn cdl(&self) -> char { '┓' }
+    fn cur(&self) -> char { '┗' }
+    fn cul(&self) -> char { '┛' }
 }
