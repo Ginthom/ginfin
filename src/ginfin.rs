@@ -1,67 +1,11 @@
+// Copyright 2022 Thomas Gingele (https://github.com/Ginthom)
+
 pub mod engine {
+    pub mod style;
+
     use terminal_size::{Width, Height, terminal_size};
     use std::process::Command;
-
-    struct DoubleLine{}
-    impl DoubleLine{
-        const HOR: char = '═';
-        const VER: char = '║';
-        const CRS: char = '╬'; 
-        const UDR: char = '╠';
-        const UDL: char = '╣';
-        const DLR: char = '╦';
-        const ULR: char = '╩';
-        const CDR: char = '╔';
-        const CDL: char = '╗';
-        const CUR: char = '╚';
-        const CUL: char = '╝';
-    }
-
-    struct ThinLine{}
-    impl ThinLine{
-        const HOR: char = '─';
-        const VER: char = '│';
-        const CRS: char = '┼'; 
-        const UDR: char = '├';
-        const UDL: char = '┤';
-        const DLR: char = '┬';
-        const ULR: char = '┴';
-        const CDR: char = '┌';
-        const CDL: char = '┐';
-        const CUR: char = '└';
-        const CUL: char = '┘';
-    }
-
-    struct FatLine{}
-    impl FatLine{
-        const HOR: char = '━';
-        const VER: char = '┃';
-        const CRS: char = '╋'; 
-        const UDR: char = '┣';
-        const UDL: char = '┫';
-        const DLR: char = '┳';
-        const ULR: char = '┻';
-        const CDR: char = '┏';
-        const CDL: char = '┓';
-        const CUR: char = '┗';
-        const CUL: char = '┛';
-    }
-
-    struct Line<T> {
-        style: T
-    }
-
-    impl<T> Line<T> {
-        pub fn new(style: T) -> Line<T> {
-            return Line::<T> {
-                style: style
-            };
-        }
-
-        pub fn set_style(&mut self, style: T) {
-            self.style = style;    
-        }
-    }
+    use crate::ginfin::engine::style::Line;
 
     pub struct Dimension {
         pub width:  usize,
@@ -116,6 +60,16 @@ pub mod engine {
             return grid;
         }
 
+        fn check_pos(&self, x: usize, y: usize) -> Result<bool, String> {
+            match x < self.bounds.width-1
+               && y < self.bounds.height-1 {
+                true => Ok(true),
+                false => Err("Pixel out of bounds".to_string())
+            }
+        }
+
+        // ELEMENT SETTER
+
         pub fn set_pixel(&mut self, x: usize, y: usize, content: char) {
             match self.check_pos(x, y) {
                 Ok(_) => self.rows[y].pixel[x] = content,
@@ -131,60 +85,44 @@ pub mod engine {
             }
         }
 
-        pub fn set_hline(&mut self, x: usize, y: usize, length: usize) {
+        pub fn set_hline(&mut self, x: usize, y: usize, length: usize, line: &dyn Line) {
             for i in 0..length {
-                match self.get_pixel(x+i, y) {
-                    DoubleLine::VER => self.set_pixel(x+i, y, DoubleLine::CRS),
-                    _            => self.set_pixel(x+i, y, DoubleLine::HOR)
+                if self.get_pixel(x+i, y) == line.VER() {
+                    self.set_pixel(x+i, y, line.CRS());
+                } else {
+                    self.set_pixel(x+i, y, line.HOR());  
                 }
             }
         }
 
-        pub fn set_vline(&mut self, x: usize, y: usize, length: usize) {
+        pub fn set_vline(&mut self, x: usize, y: usize, length: usize, line: &dyn Line) {
             for i in 0..length {
-                match self.get_pixel(x, y+i) {
-                    DoubleLine::HOR => self.set_pixel(x, y+i, DoubleLine::CRS),
-                    _            => self.set_pixel(x, y+i, DoubleLine::VER)
+                if self.get_pixel(x, y+i) == line.HOR() {
+                    self.set_pixel(x, y+i, line.CRS());
+                } else {
+                    self.set_pixel(x, y+1, line.VER());
                 }
             }
         }
 
-        pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize) {
-            self.set_pixel(x, y, DoubleLine::CDR);
-            self.set_pixel(x+width, y, DoubleLine::CDL);
-            self.set_pixel(x, y+height, DoubleLine::CUR);
-            self.set_pixel(x+width, y+height, DoubleLine::CUL);
-            self.set_hline(x+1, y, width-1);
-            self.set_hline(x+1, y+height, width-1);
-            self.set_vline(x, y+1, height-1);
-            self.set_vline(x+width, y+1, height-1);
+        pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize, line: &dyn Line) {
+            self.set_pixel(x, y, line.CDR());
+            self.set_pixel(x+width, y, line.CDL());
+            self.set_pixel(x, y+height, line.CUR());
+            self.set_pixel(x+width, y+height, line.CUL());
+            self.set_hline(x+1, y, width-1, line);
+            self.set_hline(x+1, y+height, width-1, line);
+            self.set_vline(x, y+1, height-1, line);
+            self.set_vline(x+width, y+1, height-1, line);
         }
+
+        // ELEMENT GETTER
 
         pub fn get_pixel(&self, x: usize, y: usize) -> char {
             match self.check_pos(x, y) {
                 Ok(_)  => self.rows[y].pixel[x],
                 Err(_) => ' '
             }
-        }
-
-        fn check_pos(&self, x: usize, y: usize) -> Result<bool, String> {
-            match x < self.bounds.width-1
-               && y < self.bounds.height-1 {
-                true => Ok(true),
-                false => Err("Pixel out of bounds".to_string())
-            }
-        }
-    }
-
-    pub fn draw(grid: Grid) {
-        Command::new("clear")
-                 .status()
-                 .expect("Failed to clear terminal!");
-        for row in grid.rows {
-            for pixel in row.pixel {
-                print!("{}", pixel);
-            }
-            print!("\n");
         }
     }
 
@@ -201,6 +139,19 @@ pub mod engine {
            && dim.height > 0 {
             true  => Ok(dim),
             false => Err("Failed to get terminal size!".to_string())
+        }
+    }
+
+    pub fn draw(grid: Grid) {
+        Command::new("clear")
+                .status()
+                .expect("Failed to clear terminal!");
+        for row in grid.rows {
+            for pixel in row.pixel {
+                print!("{}", pixel);
+            }
+
+            print!("\n");
         }
     }
 }
