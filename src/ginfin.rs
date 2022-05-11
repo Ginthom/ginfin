@@ -2,8 +2,8 @@ pub mod engine {
     use terminal_size::{Width, Height, terminal_size};
     use std::process::Command;
 
-    struct DOUBLE_LINES{}
-    impl DOUBLE_LINES{
+    struct DoubleLine{}
+    impl DoubleLine{
         const HOR: char = '═';
         const VER: char = '║';
         const CRS: char = '╬'; 
@@ -17,8 +17,8 @@ pub mod engine {
         const CUL: char = '╝';
     }
 
-    struct THIN_LINES{}
-    impl THIN_LINES{
+    struct ThinLine{}
+    impl ThinLine{
         const HOR: char = '─';
         const VER: char = '│';
         const CRS: char = '┼'; 
@@ -32,8 +32,8 @@ pub mod engine {
         const CUL: char = '┘';
     }
 
-    struct FAT_LINES{}
-    impl FAT_LINES{
+    struct FatLine{}
+    impl FatLine{
         const HOR: char = '━';
         const VER: char = '┃';
         const CRS: char = '╋'; 
@@ -45,6 +45,22 @@ pub mod engine {
         const CDL: char = '┓';
         const CUR: char = '┗';
         const CUL: char = '┛';
+    }
+
+    struct Line<T> {
+        style: T
+    }
+
+    impl<T> Line<T> {
+        pub fn new(style: T) -> Line<T> {
+            return Line::<T> {
+                style: style
+            };
+        }
+
+        pub fn set_style(&mut self, style: T) {
+            self.style = style;    
+        }
     }
 
     pub struct Dimension {
@@ -118,8 +134,8 @@ pub mod engine {
         pub fn set_hline(&mut self, x: usize, y: usize, length: usize) {
             for i in 0..length {
                 match self.get_pixel(x+i, y) {
-                    DOUBLE_LINES::VER => self.set_pixel(x+i, y, DOUBLE_LINES::CRS),
-                    _            => self.set_pixel(x+i, y, DOUBLE_LINES::HOR)
+                    DoubleLine::VER => self.set_pixel(x+i, y, DoubleLine::CRS),
+                    _            => self.set_pixel(x+i, y, DoubleLine::HOR)
                 }
             }
         }
@@ -127,17 +143,17 @@ pub mod engine {
         pub fn set_vline(&mut self, x: usize, y: usize, length: usize) {
             for i in 0..length {
                 match self.get_pixel(x, y+i) {
-                    DOUBLE_LINES::HOR => self.set_pixel(x, y+i, DOUBLE_LINES::CRS),
-                    _            => self.set_pixel(x, y+i, DOUBLE_LINES::VER)
+                    DoubleLine::HOR => self.set_pixel(x, y+i, DoubleLine::CRS),
+                    _            => self.set_pixel(x, y+i, DoubleLine::VER)
                 }
             }
         }
 
         pub fn set_rectangle(&mut self, x: usize, y: usize, width: usize, height: usize) {
-            self.set_pixel(x, y, DOUBLE_LINES::CDR);
-            self.set_pixel(x+width, y, DOUBLE_LINES::CDL);
-            self.set_pixel(x, y+height, DOUBLE_LINES::CUR);
-            self.set_pixel(x+width, y+height, DOUBLE_LINES::CUL);
+            self.set_pixel(x, y, DoubleLine::CDR);
+            self.set_pixel(x+width, y, DoubleLine::CDL);
+            self.set_pixel(x, y+height, DoubleLine::CUR);
+            self.set_pixel(x+width, y+height, DoubleLine::CUL);
             self.set_hline(x+1, y, width-1);
             self.set_hline(x+1, y+height, width-1);
             self.set_vline(x, y+1, height-1);
