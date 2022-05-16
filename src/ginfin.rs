@@ -117,6 +117,17 @@ pub mod engine {
             self.set_vline(x+width, y+1,      height-1, line);
         }
 
+        pub fn set_titlebox(&mut self, x: usize, y: usize, width: usize, height: usize, mut text: String, line: &dyn Line) {
+            text.truncate(width-1);
+
+            self.set_rectangle(x, y, width, height, line);
+            self.set_text(x+1, y+1, text);
+            self.set_hline(x, y+2, width, line);
+            self.set_pixel(x, y+2, line.udr());
+            self.set_pixel(x+width, y+2, line.udl());
+
+        }
+
         // ELEMENT GETTER
 
         pub fn get_pixel(&self, x: usize, y: usize) -> char {
