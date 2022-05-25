@@ -1,11 +1,11 @@
 // Copyright 2022 Thomas Gingele (https://github.com/Ginthom)
 
 pub mod engine {
-    pub mod style;
+    pub mod lines;
 
     use terminal_size::{Width, Height, terminal_size};
     use std::process::Command;
-    use crate::ginfin::engine::style::Line;
+    use crate::ginfin::engine::lines::Line;
 
     pub struct Dimension {
         pub width:  usize,

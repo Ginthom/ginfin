@@ -1,7 +1,7 @@
 mod ginfin;
 
 use crate::ginfin::engine::{Grid, draw};
-use crate::ginfin::engine::style::{Fat, Thin, Double};
+use crate::ginfin::engine::lines::{Fat, Thin, Double};
 
 fn test_display() {
     let mut grid = Grid::new();
