@@ -2,10 +2,12 @@
 
 pub mod engine {
     pub mod lines;
+    pub mod loading_bars;
 
     use terminal_size::{Width, Height, terminal_size};
     use std::process::Command;
     use crate::ginfin::engine::lines::Line;
+    use crate::ginfin::engine::loading_bars::Bar;
 
     pub struct Dimension {
         pub width:  usize,
@@ -126,6 +128,18 @@ pub mod engine {
             self.set_pixel(x, y+2, line.udr());
             self.set_pixel(x+width, y+2, line.udl());
 
+        }
+
+        pub fn set_loadingbar(&mut self, x: usize, y: usize, length: usize, progress: usize, bar: &dyn Bar) {
+            self.set_pixel(x,        y, bar.front());
+            self.set_pixel(x+length, y, bar.end());
+
+            for i in 1..length {
+                match i <= progress/length {
+                    true  => self.set_pixel(x+i, y, bar.full()),
+                    false => self.set_pixel(x+i, y, bar.empty())
+                };
+            }
         }
 
         // ELEMENT GETTER

@@ -2,6 +2,7 @@ mod ginfin;
 
 use crate::ginfin::engine::{Grid, draw};
 use crate::ginfin::engine::lines::{Fat, Thin, Double};
+use crate::ginfin::engine::loading_bars::{Round, Cube, Diamond, Full};
 
 fn test_display() {
     let mut grid = Grid::new();
@@ -23,6 +24,11 @@ fn test_display() {
     grid.set_titlebox(0, 22, 10, 10, "A Box".to_string(), &Thin{});
     grid.set_titlebox(11, 22, 10, 10, "sjhfgsjdgfsjhdfgsjhgsdjhfgsjkhgfasdfhalsg".to_string(), &Fat{});
     grid.set_titlebox(22, 22, 10, 10, " Hello C:".to_string(), &Double{});
+
+    grid.set_loadingbar(0, 33, 10, 50, &Diamond{});
+    grid.set_loadingbar(0, 34, 10, 66, &Round{});
+    grid.set_loadingbar(0, 35, 10, 25, &Cube{});
+    grid.set_loadingbar(0, 36, 10, 85, &Full{});
 
     draw(grid);
 }
