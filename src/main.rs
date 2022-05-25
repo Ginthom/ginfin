@@ -21,7 +21,7 @@ fn test_display() {
     grid.set_text(1, 19, "This is merely a test run".to_string());
 
     grid.set_titlebox(0, 22, 10, 10, "A Box".to_string(), &Thin{});
-    grid.set_titlebox(11, 22, 10, 10, "Too much text in this one".to_string(), &Fat{});
+    grid.set_titlebox(11, 22, 10, 10, "sjhfgsjdgfsjhdfgsjhgsdjhfgsjkhgfasdfhalsg".to_string(), &Fat{});
     grid.set_titlebox(22, 22, 10, 10, " Hello C:".to_string(), &Double{});
 
     draw(grid);
