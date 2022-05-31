@@ -143,8 +143,7 @@ pub mod engine {
         }
 
         pub fn set_tiny_loadingbar(&mut self, x: usize, y: usize, progress: usize) {
-            let tbar: TinyBar;
-            self.set_pixel(x, y, tbar.get(progress));
+            self.set_pixel(x, y, TinyBar{}.get(progress));
         }
 
         // ELEMENT GETTER
