@@ -17,8 +17,12 @@ impl Grid {
     fn init_grid(&mut self) {
         self.pixel = Vec::<Vec<char>>::new();
 
-        for i in 1..self.height {
+        for y in 1..self.height {
             self.pixel.push(Vec::<char>::new());
+
+            for _ in 1..self.width {
+                self.pixel[y].push(' ');
+            } 
         }
     }
 
