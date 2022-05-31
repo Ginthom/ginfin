@@ -3,11 +3,8 @@ ideas.md
 
 # Added by cargo
 
-/target
+ginfin/target
+showcase/target
 
 
-# Added by cargo
-#
-# already existing elements were commented out
 
-#/target
