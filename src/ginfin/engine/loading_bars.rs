@@ -39,3 +39,18 @@ impl Bar for Full {
     fn full(&self)  -> char { return '▆'; }
 
 }
+
+pub struct TinyBar {}
+impl TinyBar {
+    pub fn get(&self, progress: usize) -> char {
+        let bars = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
+
+        for i in 0..7 {
+            match i*12 >= progress {
+                true  => return bars[i],
+                false => continue
+            };
+        }
+        return bars[7];
+    }
+}

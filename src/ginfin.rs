@@ -7,7 +7,7 @@ pub mod engine {
     use terminal_size::{Width, Height, terminal_size};
     use std::process::Command;
     use crate::ginfin::engine::lines::Line;
-    use crate::ginfin::engine::loading_bars::Bar;
+    use crate::ginfin::engine::loading_bars::{Bar, TinyBar};
 
     pub struct Dimension {
         pub width:  usize,
@@ -140,6 +140,11 @@ pub mod engine {
                     false => self.set_pixel(x+i, y, bar.empty())
                 };
             }
+        }
+
+        pub fn set_tiny_loadingbar(&mut self, x: usize, y: usize, progress: usize) {
+            let tbar: TinyBar;
+            self.set_pixel(x, y, tbar.get(progress));
         }
 
         // ELEMENT GETTER
