@@ -1,3 +1,5 @@
+//Copyright 2022 Thomas Gingele (https://github.com/B1TC0R3)
+
 use terminal_size::{Width, Height, terminal_size};
 
 pub struct Grid {
