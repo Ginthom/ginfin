@@ -1,4 +1,4 @@
-//Copyright 2022 Thomas Gingele (https://github.com/Ginthom)
+//Copyright 2022 Thomas Gingele (https://github.com/B1TC0R3)
 
 #[cfg(test)]
 mod tests {
