@@ -7,6 +7,7 @@ A very basic tui-engine im working on to improve my Rust.
 - Draw text
 - Draw horizontal and vertical lines
 - Draw boxes
+- Draw loading bars
 
 Lines that cross each other will be joined together on the screen.
 This makes for a smoother look.
